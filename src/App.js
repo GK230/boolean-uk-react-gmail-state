@@ -4,9 +4,22 @@ import initialEmails from './data/emails'
 
 import './App.css'
 
+import { useState } from 'react'
+
 function App() {
   // Use initialEmails for state
-  console.log(initialEmails)
+  // console.log(initialEmails)
+
+  const [emails, setEmails] = useState(initialEmails)
+  console.log(emails)
+
+  function toggleRead(event, email) {
+    if (email.read === false) {
+      setEmails([...emails, (email.read = true)])
+    } else {
+      setEmails([...emails, (email.read = false)])
+    }
+  }
 
   return (
     <div className="app">
@@ -39,9 +52,27 @@ function App() {
           </li>
         </ul>
       </nav>
-      <main className="emails">{/* Render a list of emails here */}</main>
+      <main className="emails">
+        <ul>
+          {emails.map(function (email) {
+            return (
+              <li className="email">
+                <input
+                  type="checkbox"
+                  onChange={event => toggleRead(event.target.value, email)}
+                />
+                <input type="checkbox" className="star-checkbox" />
+                <p>{email.sender}</p>
+                <p className="title">{email.title}</p>
+              </li>
+            )
+          })}
+        </ul>
+      </main>
     </div>
   )
 }
+
+
 
 export default App
