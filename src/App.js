@@ -13,12 +13,15 @@ function App() {
   const [emails, setEmails] = useState(initialEmails)
   console.log(emails)
 
-  function toggleRead(event, email) {
-    if (email.read === false) {
-      setEmails([...emails, (email.read = true)])
-    } else {
-      setEmails([...emails, (email.read = false)])
-    }
+  function toggleRead(targetEmail) {
+    const updatedEmails = emails.map(function(email) {
+      if (email.id === targetEmail.id) {
+        email.read = !email.read
+        console.log(email)
+      }
+      return email
+    })
+    setEmails(updatedEmails)
   }
 
   return (
@@ -42,7 +45,7 @@ function App() {
           </li>
 
           <li className="item toggle">
-            <label for="hide-read">Hide read</label>
+            <label htmlFor="hide-read">Hide read</label>
             <input
               id="hide-read"
               type="checkbox"
@@ -53,13 +56,16 @@ function App() {
         </ul>
       </nav>
       <main className="emails">
-        <ul>
+        <ul className="inbox-list">
           {emails.map(function (email) {
             return (
-              <li className="email">
+              <li key={email.id} className="email">
                 <input
                   type="checkbox"
-                  onChange={event => toggleRead(event.target.value, email)}
+                  checked={email.read}
+                  onChange={function () {
+                    toggleRead(email)
+                  }}
                 />
                 <input type="checkbox" className="star-checkbox" />
                 <p>{email.sender}</p>
@@ -72,7 +78,5 @@ function App() {
     </div>
   )
 }
-
-
 
 export default App
